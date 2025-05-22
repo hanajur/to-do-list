@@ -1,0 +1,138 @@
+body {
+    font-family: 'Bellota Text', cursive;
+    background-color: #f4f4f4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 100vh;
+    margin: 0;
+}
+
+.container {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    width: 100%;
+    max-width: 500px;
+}
+
+h1 {
+    color: #333;
+    margin-bottom: 25px;
+    font-family: 'Poiret One', cursive;
+    font-weight: 400, bold;
+}
+
+.input-group {
+    display: flex;
+    margin-bottom: 20px;
+}
+
+#taskInput {
+    flex-grow: 1;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    margin-right: 10px;
+    font-family: 'Bellota Text', cursive;
+}
+
+#addTaskBtn {
+    background-color: #5cb85c;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    font-family: 'Bellota Text', cursive;
+    font-weight: bold;
+}
+
+#addTaskBtn:hover {
+    background-color: #4cae4c;
+}
+
+#taskList {
+    list-style: none;
+    padding: 0;
+}
+
+#taskList li {
+    background-color: #f9f9f9;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-left: 5px solid #007bff;
+}
+
+#taskList li.completed {
+    text-decoration: line-through;
+    color: #888;
+    border-left-color: #ccc;
+}
+
+#taskList li button {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-left: 10px;
+    transition: background-color 0.3s ease;
+}
+
+#taskList button.complete-btn {
+    background-color: #007bff;
+    margin-right: 5px;
+}
+
+#taskList li button.complete-btn:hover {
+    background-color: #0056b3;
+}
+
+#taskList li button.delete-btn:hover {
+    background-color: #c82333;
+}
+
+.filters {
+    margin-bottom: 20px; 
+    display: flex;
+    justify-content: center; 
+    gap: 10px;
+}
+
+.filters button {
+    background-color: #e0e0e0; 
+    color: #333; 
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 15px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    font-family: 'Bellota Text', cursive;
+}
+
+.filters button:hover {
+    background-color: #d0d0d0;
+}
+
+.filters button.active {
+    background-color: #007bff; 
+    color: white; 
+}
+
+.filters button.active:hover {
+    background-color: #0056b3; 
+}
+
