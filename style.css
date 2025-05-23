@@ -291,18 +291,3 @@ h1 {
     transform: translate(-50%, -50%) scale(1); 
     opacity: 1;
 }
-
-@keyframes fallToTrash {
-    0% {
-        opacity: 1;
-        transform: translate(0, 0) scale(1);
-    }
-    50% {
-        opacity: 0.8;
-        transform: translate(calc(var(--trash-x) - var(--item-x)), calc(var(--trash-y) - var(--item-y))) scale(0.5); /* Pohyb k koši */
-    }
-    100% {
-        opacity: 0;
-        transform: translate(calc(var(--trash-x) - var(--item-x)), calc(var(--trash-y) - var(--item-y))) scale(0); /* Zmizení a zmenšení */
-    }
-}

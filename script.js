@@ -60,6 +60,52 @@ function handleTaskAction(e) {
     }
 }
 
+// Funkce pro smazání úkolu
+function deleteTask(e) {
+    const item = e.target.closest('li'); 
+    const trashCan = document.getElementById('animatedTrashCan');
+    const taskList = document.getElementById('taskList');
+
+    if (!item) return; // Pokud z nějakého důvodu nenajde li, nic nedělej
+
+    // Získáme pozici úkolu
+    const itemRect = item.getBoundingClientRect();
+    // Získáme pozici animovaného koše (vycentrováno na obrazovce)
+    const trashRect = trashCan.getBoundingClientRect();
+
+    // Vytvoříme klon úkolu pro animaci
+    const animatedItem = item.cloneNode(true);
+    animatedItem.style.position = 'fixed'; 
+    animatedItem.style.top = itemRect.top + 'px';
+    animatedItem.style.left = itemRect.left + 'px';
+    animatedItem.style.width = itemRect.width + 'px';
+    animatedItem.style.height = itemRect.height + 'px';
+    animatedItem.style.zIndex = '999'; // Bude pod animovaným košem, ale nad ostatním obsahem
+
+    // Přidáme animovaný klon na body (aby byl nad všemi ostatními prvky a mohl se volně pohybovat)
+    document.body.appendChild(animatedItem);
+
+    // Spustíme animaci koše
+    trashCan.classList.add('active');
+
+    // Nastavíme CSS proměnné pro animaci pádu
+    animatedItem.style.setProperty('--item-x', itemRect.left + (itemRect.width / 2) + 'px');
+    animatedItem.style.setProperty('--item-y', itemRect.top + (itemRect.height / 2) + 'px');
+    animatedItem.style.setProperty('--trash-x', (trashRect.left + trashRect.width / 2) + 'px');
+    animatedItem.style.setProperty('--trash-y', (trashRect.top + trashRect.height / 2) + 'px');
+
+    // Spustíme animaci pádu klonu úkolu
+    animatedItem.style.animation = 'fallToTrash 1s ease-in-out forwards';
+
+    // Po dokončení animace (po 1s) úkol skutečně smažeme a odstraníme klon
+    animatedItem.addEventListener('animationend', () => {
+        item.remove();
+        animatedItem.remove();
+        trashCan.classList.remove('active');
+        saveTasks();
+    });
+}
+
 // filtrování úkolů
 function filterTasks() {
     const tasks = taskList.children; // Získáme všechny 'li' elementy v seznamu úkolů
@@ -133,6 +179,12 @@ taskInput.addEventListener('keypress', function(e) {
 // Při kliknutí kdekoli v seznamu úkolů zavoláme funkci handleTaskAction
 taskList.addEventListener('click', handleTaskAction);
 
+// Mazání úkolu
+document.getElementById('taskList').addEventListener('click', function(e) {
+    if (e.target.classList.contains('delete-btn') || e.target.closest('.delete-btn')) {
+        deleteTask(e);
+    }
+});
 
 // Event listenery pro tlačítka filtrů
 filterAllBtn.addEventListener('click', () => setActiveFilterButton(filterAllBtn));
