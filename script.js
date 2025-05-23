@@ -17,7 +17,7 @@ function addTask() {
         return;
     }
 
-    // Vytvoříme nový 'li' element pro úkol
+    // 1. Vytvoříme nový 'li' element pro úkol (TENTO BUDE VLOŽEN DO SEZNAMU PO ANIMACI)
     const li = document.createElement('li');
     li.innerHTML = `
         <span>${taskText}</span>
@@ -27,16 +27,61 @@ function addTask() {
         </div>
     `;
 
-    // Přidáme nový 'li' element do seznamu úkolů
-    taskList.appendChild(li);
+    // 2. Vytvoříme klon úkolu pro animaci (TENTO SE BUDE POHYBOVAT)
+    const animatedLi = li.cloneNode(true);
+
+    // Získáme pozici vstupního pole (start animace)
+    const inputRect = taskInput.getBoundingClientRect();
+
+    // Nastavíme počáteční styly pro animovaný klon
+    animatedLi.style.position = 'fixed';
+    animatedLi.style.top = inputRect.top + 'px'; // Start z horní pozice inputu
+    animatedLi.style.left = inputRect.left + 'px'; // Start z levé pozice inputu
+    animatedLi.style.width = inputRect.width + 'px'; // Původní šířka jako input
+    animatedLi.style.height = inputRect.height + 'px'; // Původní výška jako input
+    animatedLi.style.zIndex = '1000'; // Zajistíme, že bude nad všemi prvky
+    animatedLi.style.opacity = '0'; // Zpočátku neviditelný
+    animatedLi.style.transform = 'scale(0.8)'; // Zmenšený na začátku
+
+    // 3. Přidáme transition vlastnosti na animovaný klon
+    animatedLi.style.transition = 'top 0.7s ease-out, left 0.7s ease-out, ' +
+                                  'transform 0.7s ease-out, opacity 0.7s ease-out';
+
+    // Připojíme animovaný klon k body elementu
+    document.body.appendChild(animatedLi);
 
     // Vyčistíme vstupní pole po přidání úkolu
     taskInput.value = '';
 
-    // Uložíme úkoly do lokálního úložiště
-    saveTasks();
-    // A po přidání úkolu ihned aplikujeme aktuální filtr
-    filterTasks();
+    // Důležité: Nucené překreslení prohlížeče.
+    // Zajistíme, že prohlížeč aplikoval počáteční styly před spuštěním přechodu.
+    void animatedLi.offsetWidth;
+
+    // 4. Nastavíme cílové styly pro animovaný klon
+    // Musíme úkol přidat do DOMu, abychom získali jeho cílovou pozici
+    taskList.appendChild(li); // Dočasně přidáme li, abychom dostali jeho pozici
+    const targetRect = li.getBoundingClientRect(); // Získáme pozici, kde by měl úkol být
+
+    // Okamžitě skryjeme původní 'li', aby se zobrazoval jen animovaný klon
+    li.style.opacity = '0';
+    li.style.pointerEvents = 'none'; // Zabrání interakci s původním prvkem
+
+    animatedLi.style.top = targetRect.top + 'px'; // Cílová Y pozice
+    animatedLi.style.left = targetRect.left + 'px'; // Cílová X pozice
+    animatedLi.style.width = targetRect.width + 'px'; // Cílová šířka úkolu
+    animatedLi.style.height = targetRect.height + 'px'; // Cílová výška úkolu
+    animatedLi.style.opacity = '1'; // Stane se viditelným
+    animatedLi.style.transform = 'scale(1)'; // Zvětší se na plnou velikost
+
+
+    // 5. Po dokončení animace (po skončení transition) odstraníme dočasný animovaný klon
+    animatedLi.addEventListener('transitionend', () => {
+        animatedLi.remove(); // Odstraníme animovaný klon
+        li.style.opacity = '1'; // Znovu zviditelníme skutečný úkol
+        li.style.pointerEvents = 'auto'; // Znovu povolíme interakci
+        saveTasks(); // Uložíme úkoly (s již přidaným úkolem)
+        filterTasks(); // Aplikujeme aktuální filtr
+    }, { once: true });
 }
 
 // Funkce pro označení úkolu jako hotového nebo jeho smazání
