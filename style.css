@@ -274,3 +274,35 @@ h1 {
         padding: 0.5rem;
     }
 }
+
+#animatedTrashCan {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0); 
+    font-size: 5rem; 
+    color: #F44336; 
+    opacity: 0; 
+    z-index: 1000; 
+    transition: transform 0.5s ease-out, opacity 0.5s ease-out; 
+}
+
+#animatedTrashCan.active {
+    transform: translate(-50%, -50%) scale(1); 
+    opacity: 1;
+}
+
+@keyframes fallToTrash {
+    0% {
+        opacity: 1;
+        transform: translate(0, 0) scale(1);
+    }
+    50% {
+        opacity: 0.8;
+        transform: translate(calc(var(--trash-x) - var(--item-x)), calc(var(--trash-y) - var(--item-y))) scale(0.5); /* Pohyb k koši */
+    }
+    100% {
+        opacity: 0;
+        transform: translate(calc(var(--trash-x) - var(--item-x)), calc(var(--trash-y) - var(--item-y))) scale(0); /* Zmizení a zmenšení */
+    }
+}
